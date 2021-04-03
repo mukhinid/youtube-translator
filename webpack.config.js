@@ -36,6 +36,9 @@ const config = {
       },
     ],
   },
+  resolve: {
+    extensions: [ '.ts', '.js' ],
+  },
   plugins: [
     new CopyPlugin({
       patterns: [{ from: 'public', to: '.' }],
