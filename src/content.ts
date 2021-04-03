@@ -15,7 +15,6 @@ function injectButton(popup: Element): void {
   const toHeader = popup.querySelector('#language-name-row .metadata-editor-translated .language-header');
   if (fromHeader && toHeader) {
     if (toHeader.querySelector('.youtube-translator-button')) {
-      console.log('Button is already set!');
       return;
     }
 
@@ -29,16 +28,16 @@ function injectButton(popup: Element): void {
       button.addEventListener('click', () => {
         const fromCode = getCode(from);
         const toCode = getCode(to);
-        translate(fromCode, toCode);
+        translate(popup, fromCode, toCode);
       });
       toHeader.appendChild(button);
     }
   }
 }
 
-function translate(from: string, to: string) {
-  const originalNodes = document.querySelectorAll('#scrollable-content-container .metadata-editor-original textarea');
-  const translatedNodes = document.querySelectorAll('#scrollable-content-container .metadata-editor-translated textarea');
+function translate(popup: Element, from: string, to: string) {
+  const originalNodes = popup.querySelectorAll('#scrollable-content-container .metadata-editor-original textarea');
+  const translatedNodes = popup.querySelectorAll('#scrollable-content-container .metadata-editor-translated textarea');
   originalNodes.forEach((node, i) => {
     const textArea = node as HTMLTextAreaElement;
     const content = textArea.value;
