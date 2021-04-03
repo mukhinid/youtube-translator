@@ -47,6 +47,11 @@ function translate(from: string, to: string) {
         .then(translation => {
           const translatedTextArea = translatedNodes[i] as HTMLTextAreaElement;
           translatedTextArea.value = translation;
+          translatedTextArea.dispatchEvent(new InputEvent('input', {
+            bubbles: true,
+            cancelable: true,
+            data: translation,
+          }));
         });
     }
   });

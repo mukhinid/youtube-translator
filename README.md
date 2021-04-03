@@ -1,2 +1,2 @@
 # youtube-translator
-Translate your YouTUbe video metadata in one click!
+Translate your YouTube video metadata in one click!
