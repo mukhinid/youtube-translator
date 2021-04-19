@@ -1,3 +1,4 @@
+import { en } from './en';
 import { ru } from './ru';
 
 export interface Languages {
@@ -9,11 +10,12 @@ interface LanguagesMap {
 }
 
 const languages: LanguagesMap = {
+  'en': en,
   'ru': ru
 }
 
 export function getCode(lang: string): string {
-  const langCode = window.navigator.language;
+  const langCode = document.documentElement.lang;
 
   if (!languages[langCode]) {
     return '';
@@ -21,7 +23,7 @@ export function getCode(lang: string): string {
 
   const currentLang = languages[langCode];
 
-  if ((<Object>languages).hasOwnProperty(lang)) {
+  if ((<Object>currentLang).hasOwnProperty(lang)) {
     return currentLang[lang];
   }
   return '';
