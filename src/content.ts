@@ -1,4 +1,4 @@
-import { getCode } from './language';
+import { getCode } from './languages/languages';
 import { TranslationService } from './translation.service';
 
 const translationService = new TranslationService();
@@ -51,7 +51,7 @@ function translate(popup: Element, from: string, to: string) {
             cancelable: true,
             data: translation,
           }));
-        });
+        }).catch(error => alert(error));
     }
   });
 }

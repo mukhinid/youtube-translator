@@ -1,8 +1,6 @@
-interface Languages {
-  [key: string]: string;
-}
+import { Languages } from './languages';
 
-const languages: Languages = {
+export const ru: Languages = {
   'Абхазский': 'ab',
   'Азербайджанский': 'az',
   'Аймара': 'ay',
@@ -199,11 +197,4 @@ const languages: Languages = {
   'Ase': 'ase',
   'Sdp': 'sdp',
   'Vro': 'vro'
-}
-
-export function getCode(lang: string): string {
-  if ((<Object>languages).hasOwnProperty(lang)) {
-    return languages[lang];
-  }
-  return '';
 }
