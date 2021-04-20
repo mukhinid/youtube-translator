@@ -2,7 +2,7 @@
   "name": "youtube-translator",
   "description": "Translate your video metadata in one click",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.2.0",
   "license": "GPL-3.0-or-later",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

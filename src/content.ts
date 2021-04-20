@@ -1,9 +1,52 @@
-import { getCode } from './language';
+import { getCode } from './languages/languages';
 import { TranslationService } from './translation.service';
 
 const translationService = new TranslationService();
 
-setInterval(injectButtonToEachPopup, 3000);
+let loader = setInterval(() => {
+  const translations = document.querySelector('#table-list ytgn-video-translation-row');
+  if (translations) {
+    clearInterval(loader);
+    addLanguagesListeners();
+    addPopupButtonsListeners();
+  }
+}, 100);
+
+function addLanguagesListeners() {
+  document.querySelector('#add-translations-button')?.addEventListener('click', () => {
+    setTimeout(() => {
+      const languagesList = document.querySelectorAll('#paper-list tp-yt-paper-item');
+      languagesList.forEach(lang => lang.addEventListener('click', addPopupButtonsListeners));
+    }, 100);
+  });
+}
+
+function addPopupButtonsListeners() {
+  const popupButtons = document.querySelectorAll('ytgn-video-translation-cell-metadata button:not(.ytt-event-added), ytgn-video-translation-cell-metadata ytcp-button');
+  popupButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      setTimeout(injectButtonToEachPopup, 100);
+    });
+    button.classList.add('ytt-event-added');
+  });
+  const actions = document.querySelectorAll('#metadata-actions-menu:not(.ytt-event-added)');
+  actions.forEach(action => {
+    action.addEventListener('click', () => {
+      setTimeout(addEditButtonsListeners, 100);
+    });
+    action.classList.add('ytt-event-added');
+  });
+}
+
+function addEditButtonsListeners() {
+  var editButtons = document.querySelectorAll('#paper-list [test-id=edit]:not(.ytt-event-added)');
+  editButtons.forEach(button => {
+    setTimeout(() => {
+      button.addEventListener('click', injectButtonToEachPopup);
+      button.classList.add('ytt-event-added');
+    }, 100);
+  });
+}
 
 function injectButtonToEachPopup(): void {
   const popups = document.querySelectorAll('#metadata-editor');
@@ -35,23 +78,25 @@ function injectButton(popup: Element): void {
   }
 }
 
-function translate(popup: Element, from: string, to: string) {
+async function translate(popup: Element, from: string, to: string) {
   const originalNodes = popup.querySelectorAll('#scrollable-content-container .metadata-editor-original textarea');
   const translatedNodes = popup.querySelectorAll('#scrollable-content-container .metadata-editor-translated textarea');
-  originalNodes.forEach((node, i) => {
-    const textArea = node as HTMLTextAreaElement;
+  for (let i = 0; i < originalNodes.length; i++) {
+    const textArea = originalNodes[i] as HTMLTextAreaElement;
     const content = textArea.value;
     if (content) {
-      translationService.translate(content, from, to)
-        .then(translation => {
-          const translatedTextArea = translatedNodes[i] as HTMLTextAreaElement;
+      try {
+        const translation = await translationService.translate(content, from, to);
+        const translatedTextArea = translatedNodes[i] as HTMLTextAreaElement;
           translatedTextArea.value = translation;
           translatedTextArea.dispatchEvent(new InputEvent('input', {
             bubbles: true,
             cancelable: true,
             data: translation,
           }));
-        });
+      } catch(error) {
+        alert(error);
+      }
     }
-  });
+  }
 }
