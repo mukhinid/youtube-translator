@@ -78,23 +78,25 @@ function injectButton(popup: Element): void {
   }
 }
 
-function translate(popup: Element, from: string, to: string) {
+async function translate(popup: Element, from: string, to: string) {
   const originalNodes = popup.querySelectorAll('#scrollable-content-container .metadata-editor-original textarea');
   const translatedNodes = popup.querySelectorAll('#scrollable-content-container .metadata-editor-translated textarea');
-  originalNodes.forEach((node, i) => {
-    const textArea = node as HTMLTextAreaElement;
+  for (let i = 0; i < originalNodes.length; i++) {
+    const textArea = originalNodes[i] as HTMLTextAreaElement;
     const content = textArea.value;
     if (content) {
-      translationService.translate(content, from, to)
-        .then(translation => {
-          const translatedTextArea = translatedNodes[i] as HTMLTextAreaElement;
+      try {
+        const translation = await translationService.translate(content, from, to);
+        const translatedTextArea = translatedNodes[i] as HTMLTextAreaElement;
           translatedTextArea.value = translation;
           translatedTextArea.dispatchEvent(new InputEvent('input', {
             bubbles: true,
             cancelable: true,
             data: translation,
           }));
-        }).catch(error => alert(error));
+      } catch(error) {
+        alert(error);
+      }
     }
-  });
+  }
 }
