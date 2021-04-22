@@ -7,21 +7,19 @@ export interface Languages {
 
 interface LanguagesMap {
   [key: string]: Languages;
+  default: Languages;
 }
 
 const languages: LanguagesMap = {
   'en': en,
-  'ru': ru
+  'ru': ru,
+  default: en,
 }
 
 export function getCode(lang: string): string {
-  const langCode = document.documentElement.lang;
+  const langCode = document.documentElement.lang.substring(0, 2);
 
-  if (!languages[langCode]) {
-    return '';
-  }
-
-  const currentLang = languages[langCode];
+  const currentLang = languages[langCode] ?? languages.default;
 
   if ((<Object>currentLang).hasOwnProperty(lang)) {
     return currentLang[lang];
