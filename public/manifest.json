@@ -1,7 +1,7 @@
 {
   "name": "YouTube Translator",
   "description": "Translate your video metadata in one click",
-  "version": "0.2.1",
+  "version": "0.3",
   "manifest_version": 3,
   "content_scripts": [{
     "matches": ["https://studio.youtube.com/*"],
