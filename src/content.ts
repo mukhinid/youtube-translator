@@ -1,63 +1,69 @@
+import { classes, selectors } from './constants';
 import { getCode } from './languages/languages';
 import { TranslationService } from './translation.service';
 
 const translationService = new TranslationService();
 
-let loader = setInterval(() => {
-  const translations = document.querySelector('#table-list ytgn-video-translation-row');
+setInterval(() => {
+  const translationsContainer = document.querySelectorAll(selectors.translationContainer);
+  if (!translationsContainer.length || translationsContainer[0].classList.contains(classes.buttonInjected)) {
+    return;
+  }
+
+  const translations = translationsContainer[0].querySelector(selectors.translations);
   if (translations) {
-    clearInterval(loader);
+    translationsContainer[0].classList.add(classes.buttonInjected);
     addLanguagesListeners();
     addPopupButtonsListeners();
   }
 }, 100);
 
 function addLanguagesListeners() {
-  document.querySelector('#add-translations-button')?.addEventListener('click', () => {
+  document.querySelector(selectors.addTranslationButton)?.addEventListener('click', () => {
     setTimeout(() => {
-      const languagesList = document.querySelectorAll('#paper-list tp-yt-paper-item');
+      const languagesList = document.querySelectorAll(selectors.languagesList);
       languagesList.forEach(lang => lang.addEventListener('click', addPopupButtonsListeners));
     }, 100);
   });
 }
 
 function addPopupButtonsListeners() {
-  const popupButtons = document.querySelectorAll('ytgn-video-translation-cell-metadata button:not(.ytt-event-added), ytgn-video-translation-cell-metadata ytcp-button');
+  const popupButtons = document.querySelectorAll(selectors.popup.buttons);
   popupButtons.forEach(button => {
     button.addEventListener('click', () => {
       setTimeout(injectButtonToEachPopup, 100);
     });
-    button.classList.add('ytt-event-added');
+    button.classList.add(classes.eventAdded);
   });
-  const actions = document.querySelectorAll('#metadata-actions-menu:not(.ytt-event-added)');
+  const actions = document.querySelectorAll(selectors.popup.actions);
   actions.forEach(action => {
     action.addEventListener('click', () => {
       setTimeout(addEditButtonsListeners, 100);
     });
-    action.classList.add('ytt-event-added');
+    action.classList.add(classes.eventAdded);
   });
 }
 
 function addEditButtonsListeners() {
-  var editButtons = document.querySelectorAll('#paper-list [test-id=edit]:not(.ytt-event-added)');
+  var editButtons = document.querySelectorAll(selectors.popup.editButtons);
   editButtons.forEach(button => {
     setTimeout(() => {
       button.addEventListener('click', injectButtonToEachPopup);
-      button.classList.add('ytt-event-added');
+      button.classList.add(classes.eventAdded);
     }, 100);
   });
 }
 
 function injectButtonToEachPopup(): void {
-  const popups = document.querySelectorAll('#metadata-editor');
+  const popups = document.querySelectorAll(selectors.metadataEditor);
   popups.forEach(popup => { injectButton(popup); });
 }
 
 function injectButton(popup: Element): void {
-  const fromHeader = popup.querySelector('#language-name-row .metadata-editor-original .language-header');
-  const toHeader = popup.querySelector('#language-name-row .metadata-editor-translated .language-header');
+  const fromHeader = popup.querySelector(selectors.header.from);
+  const toHeader = popup.querySelector(selectors.header.to);
   if (fromHeader && toHeader) {
-    if (toHeader.querySelector('.youtube-translator-button')) {
+    if (toHeader.querySelector(selectors.button)) {
       return;
     }
 
@@ -66,7 +72,7 @@ function injectButton(popup: Element): void {
 
     if (from && to) {
       const button = document.createElement('button');
-      button.classList.add('youtube-translator-button');
+      button.classList.add(classes.button);
       button.textContent = '🔁 Translate';
       button.addEventListener('click', () => {
         const fromCode = getCode(from);
@@ -79,8 +85,8 @@ function injectButton(popup: Element): void {
 }
 
 async function translate(popup: Element, from: string, to: string) {
-  const originalNodes = popup.querySelectorAll('#scrollable-content-container .metadata-editor-original textarea');
-  const translatedNodes = popup.querySelectorAll('#scrollable-content-container .metadata-editor-translated textarea');
+  const originalNodes = popup.querySelectorAll(selectors.popup.original);
+  const translatedNodes = popup.querySelectorAll(selectors.popup.translated);
   for (let i = 0; i < originalNodes.length; i++) {
     const textArea = originalNodes[i] as HTMLTextAreaElement;
     const content = textArea.value;
