@@ -1,12 +1,18 @@
+import { buttonInjectedClass } from './constants';
 import { getCode } from './languages/languages';
 import { TranslationService } from './translation.service';
 
 const translationService = new TranslationService();
 
-let loader = setInterval(() => {
-  const translations = document.querySelector('#table-list ytgn-video-translation-row');
+setInterval(() => {
+  const translationsContainer = document.querySelectorAll('div.translations-list.ytgn-video-translations-section')
+  if (!translationsContainer.length || translationsContainer[0].classList.contains(buttonInjectedClass)) {
+    return;
+  }
+
+  const translations = translationsContainer[0].querySelector('#table-list ytgn-video-translation-row');
   if (translations) {
-    clearInterval(loader);
+    translationsContainer[0].classList.add(buttonInjectedClass);
     addLanguagesListeners();
     addPopupButtonsListeners();
   }
