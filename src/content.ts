@@ -86,7 +86,7 @@ async function translate(popup: Element, from: string, to: string) {
     const content = textArea.value;
     if (content) {
       try {
-        const translation = await translationService.translate(content, from, to);
+        const translation = await translationService.translate(content, from, to, i);
         const translatedTextArea = translatedNodes[i] as HTMLTextAreaElement;
           translatedTextArea.value = translation;
           translatedTextArea.dispatchEvent(new InputEvent('input', {
