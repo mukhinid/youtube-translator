@@ -1,5 +1,6 @@
 {
   "name": "youtube-translator",
+  "packageManager": "yarn@3.1.1",
   "description": "Translate your video metadata in one click",
   "private": true,
   "version": "0.3",
@@ -19,10 +20,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.13.14",
+    "@mukhinid/google-translate-api": "^1.1.73",
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^8.1.0",
     "file-loader": "^6.2.0",
-    "@mukhinid/google-translate-api": "^1.1.73",
     "ts-loader": "^8.1.0",
     "typescript": "^4.2.3",
     "url-loader": "^4.1.1",
